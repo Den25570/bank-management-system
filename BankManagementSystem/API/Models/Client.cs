@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using API.Exceptions;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Models
 {
@@ -9,7 +10,7 @@ namespace API.Models
         [RegularExpression(@"([а-яА-Я]|[a-zA-Z])+")]
         public string Firstname { get; set; }
         [Required]
-        [RegularExpression(@"([а-яА-Я]|[a-zA-Z])+")]
+        [RegularExpression(@"([а-яА-Я]|[a-zA-Z]|-)+")]
         public string Lastname { get; set; }
         [Required]
         [RegularExpression(@"([а-яА-Я]|[a-zA-Z])+")]
@@ -86,6 +87,19 @@ namespace API.Models
             databaseModel.DisabilityId = DisabilityId;
             databaseModel.IsRetired = IsRetired;
             databaseModel.MounthlyIncome = MounthlyIncome;
+
+            if (MounthlyIncome != null && MounthlyIncome < 0)
+            {
+                throw new HttpResponseException(400, $"Доход не может быть отрицательным");
+            }
+            if (PassportIssueDate > DateTime.Now || PassportIssueDate < Birthday)
+            {
+                throw new HttpResponseException(400, $"Некорректная дата выдачи паспорта");
+            }
+            if (Birthday > DateTime.Now || PassportIssueDate < Birthday)
+            {
+                throw new HttpResponseException(400, $"Некорректная дата рождения");
+            }
 
             return databaseModel;
         }

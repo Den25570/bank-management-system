@@ -22,7 +22,7 @@ namespace API.Controllers
         [Route("all")]
         public IEnumerable<Database.Client> GetAll()
         {
-            var clients = _context.Clients.OrderBy(c => c.Firstname).ToList();
+            var clients = _context.Clients.OrderBy(c => c.Lastname).ToList();
             return clients;
         }
 
@@ -43,9 +43,14 @@ namespace API.Controllers
             var client = _context.Clients.FirstOrDefault(c => c.Id == clientModel.Id);
             if (client != null)
             {
-                clientModel.ToDatabaseModel(client);
-                _context.SaveChanges();
-                return new Response("Client updated");
+                var existingClients = _context.Clients.FirstOrDefault(c => c.PassportIdNumber == clientModel.PassportIdNumber && c.Id != clientModel.Id);
+                if (existingClients == null)
+                {
+                    clientModel.ToDatabaseModel(client);
+                    _context.SaveChanges();
+                    return new Response("Клиент обновлён", true);
+                }
+                return new Response("Клиент с таким идентификационным номером уже существует", false);
             }
             throw new HttpResponseException(404, $"Client with id={clientModel.Id} does not exist");
         }
@@ -58,7 +63,7 @@ namespace API.Controllers
             {
                 _context.Clients.Remove(client);
                 _context.SaveChanges();
-                return new Response("Client deleted");
+                return new Response("Клиент удалён", true);
             }
             throw new HttpResponseException(404, $"Client with id={id} does not exist");
         }
@@ -66,9 +71,14 @@ namespace API.Controllers
         [HttpPost]
         public Response Post([FromBody] Models.Client clientModel)
         {
-            _context.Clients.Add(clientModel.ToDatabaseModel());
-            _context.SaveChanges();
-            return new Response("Client updated");
+            var existingClients = _context.Clients.FirstOrDefault(c => c.PassportIdNumber == clientModel.PassportIdNumber);
+            if (existingClients == null)
+            {
+                _context.Clients.Add(clientModel.ToDatabaseModel());
+                _context.SaveChanges();
+                return new Response("Клиент создан", true);
+            }
+            return new Response("Клиент с таким идентификационным номером уже существует", false);
         }
     }
 }

@@ -144,7 +144,8 @@ export default {
                 return this.triedUpdateOrCreate ? /^([а-яА-Я]|[a-zA-Z])+$/.test(this.clientLocal.middlename): null
             },
             birthdayState() {
-                return this.triedUpdateOrCreate ? !!this.clientLocal.birthday: null
+                return this.triedUpdateOrCreate ? new Date(this.clientLocal.birthday) < new Date() && 
+                                                  new Date(this.clientLocal.birthday) < new Date(this.clientLocal.passportIssueDate): null
             },
             sexState() {
                 return this.triedUpdateOrCreate ? this.clientLocal.sex !== null || this.clientLocal.sex !== undefined: null
@@ -162,7 +163,8 @@ export default {
                 return this.triedUpdateOrCreate ? !!this.clientLocal.passportIssuer: null
             },
             passportIssueDateState() {
-                return this.triedUpdateOrCreate ? !!this.clientLocal.passportIssueDate: null
+                return this.triedUpdateOrCreate ? new Date(this.clientLocal.passportIssueDate) < new Date() && 
+                                                  new Date(this.clientLocal.birthday) < new Date(this.clientLocal.passportIssueDate): null
             },
             birthPlaceState() {
                 return this.triedUpdateOrCreate ? !!this.clientLocal.birthPlace: null
@@ -177,13 +179,13 @@ export default {
                 return this.triedUpdateOrCreate ? !!this.clientLocal.residenceAddress: null
             },
             phoneNumberStationaryState() {
-                return this.triedUpdateOrCreate ? /^[+]?[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\\./0-9]{8,9}$/.test(this.clientLocal.phoneNumberStationary): null
+                return this.triedUpdateOrCreate ? !this.clientLocal.phoneNumberStationary || /^[+]?[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\\./0-9]{8,9}$/.test(this.clientLocal.phoneNumberStationary): null
             },
             phoneNumberMobileState() {
-                return this.triedUpdateOrCreate ? /^[+]?[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\\./0-9]{5,9}$/.test(this.clientLocal.phoneNumberMobile): null
+                return this.triedUpdateOrCreate ? !this.clientLocal.phoneNumberMobile || /^[+]?[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\\./0-9]{5,9}$/.test(this.clientLocal.phoneNumberMobile): null
             },
             emailState() {
-                return this.triedUpdateOrCreate ? /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.clientLocal.email): null
+                return this.triedUpdateOrCreate ? !this.clientLocal.email || /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.clientLocal.email): null
             },
             familyStatusIdState() {
                 return this.triedUpdateOrCreate ? !!this.clientLocal.familyStatusId: null
@@ -201,7 +203,7 @@ export default {
                 return this.triedUpdateOrCreate ? true: null
             },
             mounthlyIncomeState() {
-                return this.triedUpdateOrCreate ? true: null
+                return this.triedUpdateOrCreate ? String(this.clientLocal.mounthlyIncome).length > 0 && this.clientLocal.mounthlyIncome >= 0: null
             },
             state() {
                 return this.firstnameState && this.lastnameState  && this.middlenameState  && this.birthdayState  && 
@@ -223,7 +225,7 @@ export default {
             if (this.state) {
                 createClient(this.clientLocal).then(result => {
                     alert(result.message)
-                    this.$forceUpdate();
+                    this.$router.go()
                 })
             }
 
@@ -237,10 +239,12 @@ export default {
             }
         },
         DeleteClient() {
-            deleteClient(this.clientLocal.id).then(result => {
-                alert(result.message)
-                this.$forceUpdate();
-            })
+            if (window.confirm("Подтвердите удаление")) {
+                deleteClient(this.clientLocal.id).then(result => {
+                    alert(result.message)
+                    this.$router.go()
+                })
+            }
         }
     }
 }
