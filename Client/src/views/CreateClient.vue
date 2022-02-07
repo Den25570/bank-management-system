@@ -1,5 +1,6 @@
 <template>
-    <b-container>
+    <b-container class="my-4">
+        <h3 class="client-constructor-header">Конструктор клиента</h3>
         <client-edit class="my-3 p-3 edit-component" :isEdit="false" :client="defaultClient"></client-edit>
     </b-container>
 </template>
@@ -44,6 +45,9 @@ export default {
 </script>
 
 <style scoped>
+.client-constructor-header {
+    text-align: left;
+}
 .edit-component {
     border: 1px solid lightgray;
 }

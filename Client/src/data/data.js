@@ -114,9 +114,43 @@ const FamilyStatuses = [
       "Id": -1,
       "Name": "холост (не замужем)"
     }
-  ]
+]
+
+const Currencies = [
+  {
+    "Id": 5,
+    "Name": "RUB"
+  },
+  {
+    "Id": 4,
+    "Name": "BYN"
+  },
+  {
+    "Id": 3,
+    "Name": "GBP"
+  },
+  {
+    "Id": 2,
+    "Name": "EUR"
+  },
+  {
+    "Id": 1,
+    "Name": "USD"
+  }
+]
+
+const DepositTypes = [
+  {
+    "Id": 2,
+    "Name": "Безотзывный"
+  },
+  {
+    "Id": 1,
+    "Name": "Отзывный"
+  }
+]
     
 
 module.exports = {
-    Cities, Citizenships, Disabilities, FamilyStatuses
+    Cities, Citizenships, Disabilities, FamilyStatuses, Currencies, DepositTypes
 }

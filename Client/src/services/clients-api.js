@@ -8,7 +8,13 @@ const getClients = async () => {
         client.birthday = client.birthday.substring(0, client.birthday.indexOf("T"));
         client.passportIssueDate = client.passportIssueDate.substring(0, client.passportIssueDate.indexOf("T"));
     });
-    console.log(result)
+    return result.data;
+}
+
+const searchClientsByPassport = async (passport) => {
+    let result = await axios.get(`https://${process.env.VUE_APP_API_ENDPOINT}/clients/all/passport?passportIdNumber=${passport}`, {
+        'Content-Type': 'application/json'
+    })
     return result.data;
 }
 
@@ -52,4 +58,5 @@ export {
     deleteClient,
     updateClient,
     createClient,
+    searchClientsByPassport
 }

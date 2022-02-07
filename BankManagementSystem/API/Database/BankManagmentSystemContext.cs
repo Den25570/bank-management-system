@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using API.Database.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Database
 {
@@ -9,6 +10,14 @@ namespace API.Database
         public DbSet<Disability> Disabilities { get; set; }
         public DbSet<FamilyStatus> FamilyStatuses { get; set; }
         public DbSet<Citizenship> Citizenships { get; set; }
+        public DbSet<AccountClass> AccountClasses { get; set; }
+        public DbSet<AccountSubclass> AccountSubclasses { get; set; }
+        public DbSet<AccountType> AccountTypes { get; set; }
+        public DbSet<AccountActivity> AccountActivities { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<Deposit> Deposits { get; set; }
+        public DbSet<DepositType> DepositTypes { get; set; }
 
         public BankManagmentSystemContext(DbContextOptions<BankManagmentSystemContext> options) : base(options)
         {
@@ -16,6 +25,12 @@ namespace API.Database
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            ModifyEntities(modelBuilder);
+            Seed(modelBuilder);
+        }
+
+        private void ModifyEntities(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Client>()
                 .HasOne(c => c.RegistrationCity)
@@ -27,42 +42,32 @@ namespace API.Database
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Deposit>()
+                .HasOne(c => c.MainAccount)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict); // <--
+
+            modelBuilder.Entity<Deposit>()
+                .HasOne(e => e.PercentAccount)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Client>()
                 .HasIndex(u => u.PassportIdNumber)
                 .IsUnique();
+        }
 
-            //Department
-            var cities = new List<string>() {
-                "Минск","Гомель","Витебск","Могилёв","Гродно","Брест","Бобруйск","Барановичи","Борисов","Пинск","Орша","Мозырь","Лида","Солигорск ","Новополоцк" 
-            };
-            var disabilities = new List<string>() {
-                "Нет", "I степень", "II степень", "III степень", "IV степень"
-            };
-            var familyStatuses = new List<string>() {
-                "холост (не замужем)", "женат (замужем)", "разведен (разве­дена)", "вдовец (вдова)"
-            };
-            var citizenships = new List<string>() {
-                "Республика Беларусь", "Другое"
-            };
-            modelBuilder.Entity<City>().HasData(cities.Select((c, i) => new City() { 
-                Id = -(i+1),
-                Name = c
-            }));
-            modelBuilder.Entity<Disability>().HasData(disabilities.Select((c, i) => new Disability()
-            {
-                Id = -(i + 1),
-                Name = c
-            }));
-            modelBuilder.Entity<FamilyStatus>().HasData(familyStatuses.Select((c, i) => new FamilyStatus()
-            {
-                Id = -(i + 1),
-                Name = c
-            }));
-            modelBuilder.Entity<Citizenship>().HasData(citizenships.Select((c, i) => new Citizenship()
-            {
-                Id = -(i + 1),
-                Name = c
-            }));
+        private void Seed(ModelBuilder modelBuilder)
+        {
+            modelBuilder.SeedCitizenships();
+            modelBuilder.SeedFamilyStatuses();
+            modelBuilder.SeedCities();
+            modelBuilder.SeedDisabilities();
+            modelBuilder.SeedAccountsPlan();
+            modelBuilder.SeedAccountActivities();
+            modelBuilder.SeedAccounts();
+            modelBuilder.SeedDepositTypes();
+            modelBuilder.SeedCurrencies();
         }
     }
 }

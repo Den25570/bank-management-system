@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace API.Database
+﻿namespace API.Database
 {
-    public class City
+    public class AccountActivity
     {
         public int Id { get; set; }
         public string Name { get; set; }

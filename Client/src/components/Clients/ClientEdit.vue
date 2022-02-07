@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import {updateClient, deleteClient, createClient} from '../../services/api.js'
+import {updateClient, deleteClient, createClient} from '../../services/clients-api.js'
 import {Cities, Citizenships, Disabilities, FamilyStatuses} from '../../data/data.js'
 export default {
     name: "ClientEdit",

@@ -1,6 +1,7 @@
 <template>
-  <b-container>
-    <div class="clients-list accordion"  role="tablist">
+  <b-container class="my-4">
+    <h3 class="client-list-header">Спиcок клиентов</h3>
+    <div class="clients-list accordion" role="tablist">
         <div class="clients-list-item shadow-sm p-2 my-2" v-for="client in clients" :key="client.id">
           <div class="clients-list-item-header">
             <div class="clients-list-header-text d-flex flex-start font-weight-bold">
@@ -17,7 +18,7 @@
 </template>
 
 <script>
-import {getClients} from '../services/api.js'
+import {getClients} from '../services/clients-api.js'
 import ClientEdit from "../components/Clients/ClientEdit.vue"
 export default {
     name: "ClientList",
@@ -36,14 +37,14 @@ export default {
       GetClients: () => {
         return getClients()
       },
-      OpenItem: () => {
-
-      }
     }
 }
 </script>
 
 <style>
+.client-list-header {
+    text-align: left;
+}
 .clients-list-item-body label {
   text-align: left;
   width: 100%;

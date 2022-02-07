@@ -58,50 +58,5 @@ namespace API.Models
         [Required]
         public bool IsRetired { get; set; }
         public decimal? MounthlyIncome { get; set; }
-
-        public Database.Client ToDatabaseModel(Database.Client databaseModel = null)
-        {
-            if (databaseModel == null)
-                databaseModel = new Database.Client();
-
-            databaseModel.Firstname = Firstname;
-            databaseModel.Lastname = Lastname;
-            databaseModel.Middlename = Middlename;
-            databaseModel.Birthday = Birthday;
-            databaseModel.Sex = Sex;
-            databaseModel.PassportIdNumber = PassportIdNumber;
-            databaseModel.PassportNumber = PassportNumber;
-            databaseModel.PassportSeries = PassportSeries;
-            databaseModel.PassportIssuer = PassportIssuer;
-            databaseModel.PassportIssueDate = PassportIssueDate;
-            databaseModel.BirthPlace = BirthPlace;
-            databaseModel.ResidenceCityId = ResidenceCityId;
-            databaseModel.ResidenceAddress = ResidenceAddress;
-            databaseModel.PhoneNumberStationary = PhoneNumberStationary;
-            databaseModel.PhoneNumberMobile = PhoneNumberMobile;
-            databaseModel.Email = Email;
-            databaseModel.FamilyStatusId = FamilyStatusId;
-            databaseModel.CitizenshipId = CitizenshipId;
-            databaseModel.RegistrationCityId = RegistrationCityId;
-            databaseModel.RegistrationAddress = RegistrationAddress;
-            databaseModel.DisabilityId = DisabilityId;
-            databaseModel.IsRetired = IsRetired;
-            databaseModel.MounthlyIncome = MounthlyIncome;
-
-            if (MounthlyIncome != null && MounthlyIncome < 0)
-            {
-                throw new HttpResponseException(400, $"Доход не может быть отрицательным");
-            }
-            if (PassportIssueDate > DateTime.Now || PassportIssueDate < Birthday)
-            {
-                throw new HttpResponseException(400, $"Некорректная дата выдачи паспорта");
-            }
-            if (Birthday > DateTime.Now || PassportIssueDate < Birthday)
-            {
-                throw new HttpResponseException(400, $"Некорректная дата рождения");
-            }
-
-            return databaseModel;
-        }
     }
 }

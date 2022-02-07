@@ -2,6 +2,7 @@ using API.Exceptions;
 using API.Models;
 using API.Database;
 using Microsoft.AspNetCore.Mvc;
+using API.Extensions;
 
 namespace API.Controllers
 {
@@ -23,6 +24,14 @@ namespace API.Controllers
         public IEnumerable<Database.Client> GetAll()
         {
             var clients = _context.Clients.OrderBy(c => c.Lastname).ToList();
+            return clients;
+        }
+
+        [HttpGet]
+        [Route("all/passport")]
+        public IEnumerable<Database.Client> GetByPassportId(string passportIdNumber)
+        {
+            var clients = _context.Clients.Where(c => c.PassportIdNumber.Contains(passportIdNumber)).ToList();
             return clients;
         }
 
