@@ -7,7 +7,7 @@
                     <th>№</th>
                     <th>Идентификационный номер клиента</th>
                     <th>Тип</th>
-                    <th>Текущая сумма</th>
+                    <th>Cумма депозита</th>
                     <th>Проценты</th>
                     <th>Валюта</th>
                     <th>Начало</th>
@@ -20,7 +20,7 @@
                     <td>{{deposit.client.passportIdNumber}}</td>
                     <td>{{depositTypes.find(t => t.Id === deposit.depositTypeId).Name}}</td>
                     <td>
-                        <div>{{deposit.mainAccount.balance}}</div>
+                        <div>{{deposit.depositAmount}}</div>
                     </td>
                     <td>
                         <div>{{deposit.percentAccount.balance}}</div>
@@ -28,8 +28,8 @@
                     <td>{{currencies.find(t => t.Id === deposit.currencyId).Name}} </td>
                     <td>{{deposit.startDate}}</td>
                     <td>{{deposit.endDate}}</td>
-                    <td>{{deposit.status ? "Активен" : "Ожидается вывод средств"}}</td>
-                    <td><b-button v-if="deposit.status && deposit.depositTypeId === 1" @onclick="RevokeDeposit(deposit.id)">Отозвать</b-button></td>
+                    <td>{{deposit.status ? "Активен" : "Закрыт"}}</td>
+                    <td><b-button v-if="deposit.status && deposit.depositTypeId === 1" @click="RevokeDeposit(deposit.id)">Отозвать</b-button></td>
                 </tr>
             </table>
         </div>

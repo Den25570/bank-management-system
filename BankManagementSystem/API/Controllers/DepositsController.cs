@@ -55,15 +55,33 @@ namespace API.Controllers
         [HttpPost("Revoke/{id}")]
         public IActionResult RevokeDeposit(int id)
         {
-            var deposit = _context.Deposits.Find(id);
+            var cashAccount = _context.Accounts.Find(1);
+            var devAccount = _context.Accounts.Find(2);
+
+            var deposit = _context.Deposits
+                .Include(d => d.MainAccount)
+                .Include(d => d.PercentAccount)
+                .FirstOrDefault(d => d.Id == id);
+
             if (deposit == null)
-            {
                 return NotFound();
-            }
+            if (deposit.DepositTypeId == 2)
+                return ValidationProblem("Нельзя отозвать безотзывный вклад");
 
-            _context.Deposits.Remove(deposit);
+            deposit.Status = false;
+            //Окончание депозита
+            devAccount.Debit -= deposit.DepositAmount;
+            deposit.MainAccount.Credit += deposit.DepositAmount;
+            //Перевод депозита в кассу
+            cashAccount.Debit += deposit.DepositAmount;
+            deposit.MainAccount.Debit -= deposit.DepositAmount;
+            //Перевод % в кассу
+            cashAccount.Debit += deposit.PercentAccount.Balance;
+            deposit.PercentAccount.Debit -= deposit.PercentAccount.Balance;
+            //Вывод денег из кассы
+            cashAccount.Credit -= deposit.DepositAmount + deposit.PercentAccount.Balance;
+
             _context.SaveChanges();
-
             return NoContent();
         }
 
@@ -73,6 +91,9 @@ namespace API.Controllers
             var client = _context.Clients.Find(deposit.ClientId);
             if (client == null)
                 return ValidationProblem($"Incorrect client id = {deposit.ClientId}");
+
+            var cashAccount = _context.Accounts.Find(1);
+            var devAccount = _context.Accounts.Find(2);
 
             var mainAccountCode = deposit.DepositTypeId.GetMainAccountCode();
             var percentAccountCode = deposit.DepositTypeId.GetPercentAccountCode();
@@ -120,6 +141,16 @@ namespace API.Controllers
                     OwnerId = client.Id,
                 }
             };
+
+            // Ввод денег в кассу
+            cashAccount.Debit = deposit.DepositAmount;
+            // Перевод денег с кассы на текущий счет
+            cashAccount.Credit -= deposit.DepositAmount;
+            depositModel.MainAccount.Credit += deposit.DepositAmount;
+            // Использование денег банком
+            devAccount.Credit += deposit.DepositAmount;
+            depositModel.MainAccount.Debit -= deposit.DepositAmount;
+
             _context.Deposits.Add(depositModel);
             _context.SaveChanges();
 
