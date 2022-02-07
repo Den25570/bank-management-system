@@ -232,6 +232,7 @@ namespace API.Migrations
                     Debit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Credit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CurrencyId = table.Column<int>(type: "int", nullable: false),
                     OwnerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -475,13 +476,13 @@ namespace API.Migrations
 
             migrationBuilder.InsertData(
                 table: "Accounts",
-                columns: new[] { "Id", "AccountActivityId", "AccountTypeId", "Balance", "Credit", "Debit", "IndividualNumber", "Name", "OwnerId" },
-                values: new object[] { 1, 1, 1010, 0m, 0m, 0m, 1, "Касса банка", null });
+                columns: new[] { "Id", "AccountActivityId", "AccountTypeId", "Balance", "Credit", "CurrencyId", "Debit", "IndividualNumber", "Name", "OwnerId" },
+                values: new object[] { 1, 1, 1010, 0m, 0m, 4, 0m, 1, "Касса банка", null });
 
             migrationBuilder.InsertData(
                 table: "Accounts",
-                columns: new[] { "Id", "AccountActivityId", "AccountTypeId", "Balance", "Credit", "Debit", "IndividualNumber", "Name", "OwnerId" },
-                values: new object[] { 2, 2, 7327, 100000000000m, 0m, 0m, 1, "Счет фонда развития банка", null });
+                columns: new[] { "Id", "AccountActivityId", "AccountTypeId", "Balance", "Credit", "CurrencyId", "Debit", "IndividualNumber", "Name", "OwnerId" },
+                values: new object[] { 2, 2, 7327, 100000000000m, 0m, 4, 0m, 1, "Счет фонда развития банка", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_AccountActivityId",

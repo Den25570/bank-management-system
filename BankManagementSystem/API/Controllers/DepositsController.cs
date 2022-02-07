@@ -123,11 +123,12 @@ namespace API.Controllers
                     AccountActivityId = 2,
                     AccountTypeId = mainAccountCode,
                     Balance = 0,
-                    Credit = deposit.DepositAmount,
+                    Credit = 0,
                     Debit = 0,
                     IndividualNumber = depositMainNumber,
                     Name = $"{client.Firstname} {client.Lastname} {client.Middlename}",
                     OwnerId = client.Id,
+                    CurrencyId=deposit.CurrencyId,
                 },
                 PercentAccount = new Account()
                 {
@@ -139,6 +140,7 @@ namespace API.Controllers
                     IndividualNumber = depositPercentNumber,
                     Name = $"{client.Firstname} {client.Lastname} {client.Middlename}",
                     OwnerId = client.Id,
+                    CurrencyId = deposit.CurrencyId,
                 }
             };
 

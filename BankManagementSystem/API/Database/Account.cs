@@ -20,6 +20,8 @@ namespace API.Database
         public decimal Credit { get; set; }
         [Required]
         public decimal Balance { get; set; }
+        [Required]
+        public int CurrencyId { get; set; }
 
         public int? OwnerId { get; set; }
 

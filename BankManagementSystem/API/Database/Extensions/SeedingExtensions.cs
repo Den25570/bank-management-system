@@ -37,6 +37,7 @@ namespace API.Database.Extensions
                     AccountTypeId = 1010,  
                     AccountActivityId = 1,
                     OwnerId = null,
+                    CurrencyId = 4,
                 },
                 new Account()
                 {
@@ -49,6 +50,7 @@ namespace API.Database.Extensions
                     AccountTypeId = 7327,
                     AccountActivityId = 2,
                     OwnerId = null,
+                    CurrencyId = 4,
                 }
             );;
         }

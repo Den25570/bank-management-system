@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(BankManagmentSystemContext))]
-    [Migration("20220207124419_init")]
+    [Migration("20220207161301_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,9 @@ namespace API.Migrations
 
                     b.Property<decimal>("Credit")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Debit")
                         .HasColumnType("decimal(18,2)");
@@ -75,6 +78,7 @@ namespace API.Migrations
                             AccountTypeId = 1010,
                             Balance = 0m,
                             Credit = 0m,
+                            CurrencyId = 4,
                             Debit = 0m,
                             IndividualNumber = 1,
                             Name = "Касса банка"
@@ -86,6 +90,7 @@ namespace API.Migrations
                             AccountTypeId = 7327,
                             Balance = 100000000000m,
                             Credit = 0m,
+                            CurrencyId = 4,
                             Debit = 0m,
                             IndividualNumber = 1,
                             Name = "Счет фонда развития банка"
