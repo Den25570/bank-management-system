@@ -64,6 +64,8 @@ namespace API.Migrations
 
                     b.HasIndex("AccountTypeId");
 
+                    b.HasIndex("CurrencyId");
+
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Accounts");
@@ -76,22 +78,70 @@ namespace API.Migrations
                             AccountTypeId = 1010,
                             Balance = 0m,
                             Credit = 0m,
-                            CurrencyId = 4,
+                            CurrencyId = 1,
                             Debit = 0m,
                             IndividualNumber = 1,
-                            Name = "Касса банка"
+                            Name = "Касса банка USD"
                         },
                         new
                         {
                             Id = 2,
                             AccountActivityId = 2,
                             AccountTypeId = 7327,
-                            Balance = 100000000000m,
+                            Balance = 10000m,
                             Credit = 0m,
-                            CurrencyId = 4,
+                            CurrencyId = 1,
                             Debit = 0m,
                             IndividualNumber = 1,
-                            Name = "Счет фонда развития банка"
+                            Name = "Счет фонда развития банка USD"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountActivityId = 1,
+                            AccountTypeId = 1010,
+                            Balance = 0m,
+                            Credit = 0m,
+                            CurrencyId = 2,
+                            Debit = 0m,
+                            IndividualNumber = 2,
+                            Name = "Касса банка BYN"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountActivityId = 2,
+                            AccountTypeId = 7327,
+                            Balance = 10000000000m,
+                            Credit = 0m,
+                            CurrencyId = 2,
+                            Debit = 0m,
+                            IndividualNumber = 2,
+                            Name = "Счет фонда развития банка BYN"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountActivityId = 1,
+                            AccountTypeId = 1010,
+                            Balance = 0m,
+                            Credit = 0m,
+                            CurrencyId = 3,
+                            Debit = 0m,
+                            IndividualNumber = 3,
+                            Name = "Касса банка RUB"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AccountActivityId = 2,
+                            AccountTypeId = 7327,
+                            Balance = 100000m,
+                            Credit = 0m,
+                            CurrencyId = 3,
+                            Debit = 0m,
+                            IndividualNumber = 3,
+                            Name = "Счет фонда развития банка RUB"
                         });
                 });
 
@@ -786,21 +836,11 @@ namespace API.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "EUR"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "GBP"
-                        },
-                        new
-                        {
-                            Id = 4,
                             Name = "BYN"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 3,
                             Name = "RUB"
                         });
                 });
@@ -835,6 +875,9 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastPercentEvaluationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("MainAccountId")
@@ -990,6 +1033,12 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("API.Database.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API.Database.Client", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId");
@@ -997,6 +1046,8 @@ namespace API.Migrations
                     b.Navigation("AccountActivity");
 
                     b.Navigation("AccountType");
+
+                    b.Navigation("Currency");
 
                     b.Navigation("Owner");
                 });

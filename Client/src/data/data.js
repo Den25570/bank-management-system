@@ -118,20 +118,12 @@ const FamilyStatuses = [
 
 const Currencies = [
   {
-    "Id": 5,
+    "Id": 3,
     "Name": "RUB"
   },
   {
-    "Id": 4,
-    "Name": "BYN"
-  },
-  {
-    "Id": 3,
-    "Name": "GBP"
-  },
-  {
     "Id": 2,
-    "Name": "EUR"
+    "Name": "BYN"
   },
   {
     "Id": 1,

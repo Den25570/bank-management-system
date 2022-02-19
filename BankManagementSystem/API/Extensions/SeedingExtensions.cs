@@ -4,10 +4,13 @@ namespace API.Database.Extensions
 {
     public static class SeedingExtensions
     {
+        private static List<string> accountActivities = new List<string>() { "актив.", "пассив.", "актив.-пассив." };
+        private static List<string> currencies = new List<string>() { "USD", "BYN", "RUB" };
+        private static List<decimal> currenciesBalances = new List<decimal>() {10e3M, 10e9M, 10e4M };
+
         public static void SeedAccountActivities(this ModelBuilder modelBuilder)
         {
-            var types = new List<string>() { "актив.", "пассив.", "актив.-пассив." };
-            modelBuilder.Entity<AccountActivity>().HasData(types.Select((a, i) => new AccountActivity()
+            modelBuilder.Entity<AccountActivity>().HasData(accountActivities.Select((a, i) => new AccountActivity()
             {
                 Id = i + 1,
                 Name = a
@@ -16,8 +19,7 @@ namespace API.Database.Extensions
 
         public static void SeedCurrencies(this ModelBuilder modelBuilder)
         {
-            var types = new List<string>() { "USD", "EUR", "GBP", "BYN", "RUB" };
-            modelBuilder.Entity<Currency>().HasData(types.Select((c, i) => new Currency()
+            modelBuilder.Entity<Currency>().HasData(currencies.Select((c, i) => new Currency()
             {
                 Id = i + 1,
                 Name = c
@@ -26,33 +28,36 @@ namespace API.Database.Extensions
 
         public static void SeedAccounts(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Account>().HasData(
-                new Account() {
-                    Id = 1,
-                    Name = "Касса банка",
-                    Debit = 0,
-                    Credit = 0,
-                    Balance = 0,
-                    IndividualNumber = 1,
-                    AccountTypeId = 1010,  
-                    AccountActivityId = 1,
-                    OwnerId = null,
-                    CurrencyId = 4,
-                },
-                new Account()
-                {
-                    Id = 2,
-                    Name = "Счет фонда развития банка",
-                    Debit = 0,
-                    Credit = 0,
-                    Balance = 100e9M,
-                    IndividualNumber = 1,
-                    AccountTypeId = 7327,
-                    AccountActivityId = 2,
-                    OwnerId = null,
-                    CurrencyId = 4,
-                }
-            );;
+            for (int i = 0; i < currencies.Count; i++)
+            {
+                modelBuilder.Entity<Account>().HasData(
+                    new Account() {
+                        Id = i*2+1,
+                        Name = $"Касса банка {currencies[i]}",
+                        Debit = 0,
+                        Credit = 0,
+                        Balance = 0,
+                        IndividualNumber = i+1,
+                        AccountTypeId = 1010,  
+                        AccountActivityId = 1,
+                        OwnerId = null,
+                        CurrencyId = i+1,
+                    },
+                    new Account()
+                    {
+                        Id = i*2+2,
+                        Name = $"Счет фонда развития банка {currencies[i]}",
+                        Debit = 0,
+                        Credit = 0,
+                        Balance = currenciesBalances[i],
+                        IndividualNumber = i+1,
+                        AccountTypeId = 7327,
+                        AccountActivityId = 2,
+                        OwnerId = null,
+                        CurrencyId = i + 1,
+                    }
+                );
+            }
         }
 
         public static void SeedDepositTypes(this ModelBuilder modelBuilder)

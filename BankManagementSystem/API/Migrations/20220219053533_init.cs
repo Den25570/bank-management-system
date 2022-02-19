@@ -255,6 +255,12 @@ namespace API.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Clients",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Accounts_Currencies_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currencies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -274,7 +280,8 @@ namespace API.Migrations
                     DepositPercent = table.Column<int>(type: "int", nullable: false),
                     MainAccountId = table.Column<int>(type: "int", nullable: false),
                     PercentAccountId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    LastPercentEvaluationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -379,10 +386,8 @@ namespace API.Migrations
                 values: new object[,]
                 {
                     { 1, "USD" },
-                    { 2, "EUR" },
-                    { 3, "GBP" },
-                    { 4, "BYN" },
-                    { 5, "RUB" }
+                    { 2, "BYN" },
+                    { 3, "RUB" }
                 });
 
             migrationBuilder.InsertData(
@@ -397,15 +402,18 @@ namespace API.Migrations
             migrationBuilder.InsertData(
                 table: "Disabilities",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { -5, "IV степень" });
+                values: new object[,]
+                {
+                    { -5, "IV степень" },
+                    { -4, "III степень" },
+                    { -3, "II степень" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Disabilities",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { -4, "III степень" },
-                    { -3, "II степень" },
                     { -2, "I степень" },
                     { -1, "Нет" }
                 });
@@ -477,12 +485,15 @@ namespace API.Migrations
             migrationBuilder.InsertData(
                 table: "Accounts",
                 columns: new[] { "Id", "AccountActivityId", "AccountTypeId", "Balance", "Credit", "CurrencyId", "Debit", "IndividualNumber", "Name", "OwnerId" },
-                values: new object[] { 1, 1, 1010, 0m, 0m, 4, 0m, 1, "Касса банка", null });
-
-            migrationBuilder.InsertData(
-                table: "Accounts",
-                columns: new[] { "Id", "AccountActivityId", "AccountTypeId", "Balance", "Credit", "CurrencyId", "Debit", "IndividualNumber", "Name", "OwnerId" },
-                values: new object[] { 2, 2, 7327, 100000000000m, 0m, 4, 0m, 1, "Счет фонда развития банка", null });
+                values: new object[,]
+                {
+                    { 1, 1, 1010, 0m, 0m, 1, 0m, 1, "Касса банка USD", null },
+                    { 2, 2, 7327, 10000m, 0m, 1, 0m, 1, "Счет фонда развития банка USD", null },
+                    { 3, 1, 1010, 0m, 0m, 2, 0m, 2, "Касса банка BYN", null },
+                    { 4, 2, 7327, 10000000000m, 0m, 2, 0m, 2, "Счет фонда развития банка BYN", null },
+                    { 5, 1, 1010, 0m, 0m, 3, 0m, 3, "Касса банка RUB", null },
+                    { 6, 2, 7327, 100000m, 0m, 3, 0m, 3, "Счет фонда развития банка RUB", null }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_AccountActivityId",
@@ -493,6 +504,11 @@ namespace API.Migrations
                 name: "IX_Accounts_AccountTypeId",
                 table: "Accounts",
                 column: "AccountTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounts_CurrencyId",
+                table: "Accounts",
+                column: "CurrencyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_OwnerId",
@@ -575,9 +591,6 @@ namespace API.Migrations
                 name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "Currencies");
-
-            migrationBuilder.DropTable(
                 name: "DepositTypes");
 
             migrationBuilder.DropTable(
@@ -588,6 +601,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Currencies");
 
             migrationBuilder.DropTable(
                 name: "AccountSubclasses");

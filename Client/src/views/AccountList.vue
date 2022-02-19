@@ -23,6 +23,7 @@
                 </tr>
             </table>
         </div>
+        <b-button class="my-3" @click="EndBankDay">Закрыть день</b-button>
     </b-container>
 </template>
 

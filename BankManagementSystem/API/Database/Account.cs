@@ -25,6 +25,7 @@ namespace API.Database
 
         public int? OwnerId { get; set; }
 
+        public Currency Currency { get; set; }
         public Client Owner { get; set; }
         public AccountActivity AccountActivity { get; set; }
         public AccountType AccountType { get; set; }

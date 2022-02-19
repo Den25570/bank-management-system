@@ -30,6 +30,8 @@ namespace API.Database
         public int PercentAccountId { get; set; }
         [Required]
         public bool Status { get; set; }
+        [Required]
+        public DateTime LastPercentEvaluationDate { get; set; }
 
         public DepositType DepositType { get; set; }
         public Currency Currency { get; set; }

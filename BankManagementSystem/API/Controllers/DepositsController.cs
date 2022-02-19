@@ -55,34 +55,41 @@ namespace API.Controllers
         [HttpPost("Revoke/{id}")]
         public IActionResult RevokeDeposit(int id)
         {
-            var cashAccount = _context.Accounts.Find(1);
-            var devAccount = _context.Accounts.Find(2);
-
             var deposit = _context.Deposits
                 .Include(d => d.MainAccount)
                 .Include(d => d.PercentAccount)
                 .FirstOrDefault(d => d.Id == id);
+
+            var cashAccount = _context.Accounts.FirstOrDefault(a => a.AccountTypeId == 1010 && a.CurrencyId == deposit.CurrencyId);
+            var devAccount = _context.Accounts.FirstOrDefault(a => a.AccountTypeId == 7327 && a.CurrencyId == deposit.CurrencyId);
 
             if (deposit == null)
                 return NotFound();
             if (deposit.DepositTypeId == 2)
                 return ValidationProblem("Нельзя отозвать безотзывный вклад");
 
+            var deltaDays = (DateTime.Now - deposit.LastPercentEvaluationDate).Days;
+            var percentValue = (deltaDays / 365) * deposit.DepositPercent * deposit.DepositAmount;
+
             deposit.Status = false;
             //Окончание депозита
             devAccount.Debit -= deposit.DepositAmount;
             deposit.MainAccount.Credit += deposit.DepositAmount;
+            // Зачисление процентов
+            devAccount.Debit -= percentValue;
+            deposit.PercentAccount.Credit += percentValue;
+            deposit.LastPercentEvaluationDate = DateTime.Now;
             //Перевод депозита в кассу
-            cashAccount.Debit += deposit.DepositAmount;
-            deposit.MainAccount.Debit -= deposit.DepositAmount;
+            //cashAccount.Debit += deposit.DepositAmount;
+            //deposit.MainAccount.Debit -= deposit.DepositAmount;
             //Перевод % в кассу
-            cashAccount.Debit += deposit.PercentAccount.Balance;
-            deposit.PercentAccount.Debit -= deposit.PercentAccount.Balance;
-            //Вывод денег из кассы
-            cashAccount.Credit -= deposit.DepositAmount + deposit.PercentAccount.Balance;
+            //cashAccount.Debit += deposit.PercentAccount.Balance;
+            //deposit.PercentAccount.Debit -= deposit.PercentAccount.Balance;
+            ////Вывод денег из кассы
+            //cashAccount.Credit -= deposit.DepositAmount + deposit.PercentAccount.Balance;
 
             _context.SaveChanges();
-            return NoContent();
+            return CreatedAtAction("RevokeDeposit", new { id = deposit.Id }, "Депозит отозван");
         }
 
         [HttpPost]
@@ -92,8 +99,8 @@ namespace API.Controllers
             if (client == null)
                 return ValidationProblem($"Incorrect client id = {deposit.ClientId}");
 
-            var cashAccount = _context.Accounts.Find(1);
-            var devAccount = _context.Accounts.Find(2);
+            var cashAccount = _context.Accounts.FirstOrDefault(a => a.AccountTypeId == 1010 && a.CurrencyId == deposit.CurrencyId);
+            var devAccount = _context.Accounts.FirstOrDefault(a => a.AccountTypeId == 7327 && a.CurrencyId == deposit.CurrencyId);
 
             var mainAccountCode = deposit.DepositTypeId.GetMainAccountCode();
             var percentAccountCode = deposit.DepositTypeId.GetPercentAccountCode();
@@ -118,6 +125,7 @@ namespace API.Controllers
                 EndDate = deposit.EndDate,
                 DepositNumber = depositMainNumber + depositPercentNumber,
                 Status = true,
+                LastPercentEvaluationDate = deposit.StartDate,
                 MainAccount = new Account()
                 {
                     AccountActivityId = 2,
@@ -156,7 +164,7 @@ namespace API.Controllers
             _context.Deposits.Add(depositModel);
             _context.SaveChanges();
 
-            return CreatedAtAction("CreateDeposit", new { id = depositModel.Id }, depositModel.Id);
+            return CreatedAtAction("CreateDeposit", new { id = depositModel.Id }, "Депозит создан");
         }
 
         // DELETE: api/Deposits/5

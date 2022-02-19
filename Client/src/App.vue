@@ -18,49 +18,49 @@
 </template>
 
 <style>
-p {
-  padding: 0;
-  margin-bottom: 0 !important;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+  p {
+    padding: 0;
+    margin-bottom: 0 !important;
+  }
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
 
-.app-nav {
-  display: flex;
-  padding: 10px;
-  background-color: #2c3e50;
-}
+  .app-nav {
+    display: flex;
+    padding: 10px;
+    background-color: #2c3e50;
+  }
 
-.app-nav a {
-  color: white;
-}
+  .app-nav a {
+    color: white;
+  }
 
-.app-nav a.router-link-exact-active {
-  text-decoration: underline;
-  font-weight: bold;
-}
+  .app-nav a.router-link-exact-active {
+    text-decoration: underline;
+    font-weight: bold;
+  }
 
-.text-dark {
-  color: black !important;
-}
+  .text-dark {
+    color: black !important;
+  }
 
-.custom-select {
-  display: block;
-  width: 100%;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+  .custom-select {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
 </style>
