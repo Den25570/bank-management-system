@@ -8,8 +8,10 @@ const getAccounts = async () => {
     return result.data;
 }
 
-const endBankDay = async () => {
+const endBankDay = async (daysToSkip) => {
     let result = await axios.post(`https://${process.env.VUE_APP_API_ENDPOINT}/accounts`, {
+        daysToPass: daysToSkip
+    }, {
         'Content-Type': 'application/json'
     })
     console.log(result)

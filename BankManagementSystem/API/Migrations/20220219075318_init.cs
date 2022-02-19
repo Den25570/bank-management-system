@@ -277,11 +277,12 @@ namespace API.Migrations
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     ContractTerm = table.Column<int>(type: "int", nullable: false),
                     DepositAmount = table.Column<int>(type: "int", nullable: false),
-                    DepositPercent = table.Column<int>(type: "int", nullable: false),
+                    DepositPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MainAccountId = table.Column<int>(type: "int", nullable: false),
                     PercentAccountId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    LastPercentEvaluationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastPercentEvaluationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DaysPassed = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

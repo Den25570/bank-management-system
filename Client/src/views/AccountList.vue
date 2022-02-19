@@ -23,7 +23,11 @@
                 </tr>
             </table>
         </div>
-        <b-button class="my-3" @click="EndBankDay">Закрыть день</b-button>
+        <div class="d-flex">
+           <b-button class="my-3" @click="EndBankDay(daysToSkip)">Закрыть день</b-button>
+           <b-form-input style="width: 100px; margin: 15px;" v-model="daysToSkip" type="number"></b-form-input>
+        </div>
+       
     </b-container>
 </template>
 
@@ -37,6 +41,7 @@ export default {
             accounts: [],
             currencies: Currencies,
             depositTypes: DepositTypes,
+            daysToSkip: 1,
         }
     },
     async mounted() {
@@ -46,9 +51,9 @@ export default {
         GetAccounts: async () => {
             return await getAccounts();
         },
-        EndBankDay: () => {
+        EndBankDay: (daysToSkip) => {
             if (window.confirm("Подтвердите окончание банковского дня")) {
-                endBankDay().then(result => {
+                endBankDay(daysToSkip).then(result => {
                     alert(result.message)
                     this.$router.go()
                 })

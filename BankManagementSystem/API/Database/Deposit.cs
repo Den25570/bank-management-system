@@ -23,7 +23,7 @@ namespace API.Database
         [Required]
         public int DepositAmount { get; set; }
         [Required]
-        public int DepositPercent { get; set; }
+        public decimal DepositPercent { get; set; }
         [Required]
         public int MainAccountId { get; set; }
         [Required]
@@ -32,6 +32,8 @@ namespace API.Database
         public bool Status { get; set; }
         [Required]
         public DateTime LastPercentEvaluationDate { get; set; }
+
+        public int DaysPassed { get; set; } = 0;
 
         public DepositType DepositType { get; set; }
         public Currency Currency { get; set; }

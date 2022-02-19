@@ -123,6 +123,7 @@ namespace API.Controllers
                 DepositTypeId = deposit.DepositTypeId,
                 StartDate = deposit.StartDate,
                 EndDate = deposit.EndDate,
+                DepositPercent = deposit.Percent,
                 DepositNumber = depositMainNumber + depositPercentNumber,
                 Status = true,
                 LastPercentEvaluationDate = deposit.StartDate,
