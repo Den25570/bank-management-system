@@ -99,7 +99,8 @@ export default {
             return (new Date(this.deposit.endDate).getTime() - new Date(this.deposit.startDate).getTime())/ (1000 * 3600 * 24);
         },
         state() {
-            return this.passportIdNumberState && this.percentState && this.endDateState && this.startDateState && this.endDateState && this.contractTermState;
+            return this.passportIdNumberState && this.percentState && this.endDateState && this.startDateState 
+            && this.endDateState && this.contractTermState && this.depositAmountState;
         },
         passportIdNumberState() {
             return this.triedUpdateOrCreate ? !!this.selectedClient.id : null;
@@ -117,7 +118,7 @@ export default {
             return true; 
         },
         percentState() {
-            return  this.triedUpdateOrCreate ? this.deposit.percent >= 0 && this.deposit.percent <= 100 : null;
+            return  this.triedUpdateOrCreate ? this.deposit.percent > 0 && this.deposit.percent <= 100 : null;
         },
         startDateState() {
             return this.triedUpdateOrCreate ? Math.floor(new Date(this.deposit.startDate).getTime()/ (1000 * 3600 * 24)) >= Math.floor(new Date().getTime() / (1000 * 3600 * 24)): null;

@@ -58,7 +58,7 @@ export default {
         RevokeDeposit: (id) => {
             if (window.confirm("Подтвердите отзыв")) {
                 revokeDeposit(id).then(result => {
-                    alert(result.message)
+                    console.log(result)
                     this.$router.go()
                 })
             }

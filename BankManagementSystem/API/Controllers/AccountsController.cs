@@ -56,6 +56,8 @@ namespace API.Controllers
                     {
                         AddPercentsToDeposit(deposit, devAccount, deposit.LastPercentEvaluationDate, deposit.EndDate);
                         deposit.Status = false;
+                        devAccount.Debit -= deposit.DepositAmount;
+                        deposit.MainAccount.Credit += deposit.DepositAmount;
                     }
                     else if (deposit.LastPercentEvaluationDate < firstDayOfMonth && currentDate >= firstDayOfMonth)
                     {
@@ -68,6 +70,8 @@ namespace API.Controllers
                     {
                         AddPercentsToDeposit(deposit, devAccount, deposit.StartDate, deposit.EndDate);
                         deposit.Status = false;
+                        devAccount.Debit -= deposit.DepositAmount;
+                        deposit.MainAccount.Credit += deposit.DepositAmount;
                     }
                 }
             }
