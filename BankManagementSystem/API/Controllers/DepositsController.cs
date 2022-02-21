@@ -68,7 +68,8 @@ namespace API.Controllers
             if (deposit.DepositTypeId == 2)
                 return ValidationProblem("Нельзя отозвать безотзывный вклад");
 
-            var deltaDays = (DateTime.Now - deposit.LastPercentEvaluationDate).Days;
+            var currentDate = deposit.StartDate.AddDays(deposit.DaysPassed);
+            var deltaDays = (currentDate - deposit.LastPercentEvaluationDate).Days;
             var percentValue = (deltaDays / 365) * deposit.DepositPercent * deposit.DepositAmount;
 
             deposit.Status = false;
@@ -78,7 +79,7 @@ namespace API.Controllers
             // Зачисление процентов
             devAccount.Debit -= percentValue;
             deposit.PercentAccount.Credit += percentValue;
-            deposit.LastPercentEvaluationDate = DateTime.Now;
+            deposit.LastPercentEvaluationDate = currentDate;
             //Перевод депозита в кассу
             //cashAccount.Debit += deposit.DepositAmount;
             //deposit.MainAccount.Debit -= deposit.DepositAmount;
@@ -102,17 +103,15 @@ namespace API.Controllers
             var cashAccount = _context.Accounts.FirstOrDefault(a => a.AccountTypeId == 1010 && a.CurrencyId == deposit.CurrencyId);
             var devAccount = _context.Accounts.FirstOrDefault(a => a.AccountTypeId == 7327 && a.CurrencyId == deposit.CurrencyId);
 
-            var mainAccountCode = deposit.DepositTypeId.GetMainAccountCode();
-            var percentAccountCode = deposit.DepositTypeId.GetPercentAccountCode();
+            var mainAccountCode = deposit.DepositTypeId.GetDepositMainAccountCode();
+            var percentAccountCode = deposit.DepositTypeId.GetDepositPercentAccountCode();
             var existingDepositAccounts = _context.Accounts.Where(a => a.AccountTypeId == mainAccountCode).OrderByDescending(d => d.IndividualNumber).Take(1).ToList();
             var existingDepositPercentAccounts = _context.Accounts.Where(a => a.AccountTypeId == percentAccountCode).OrderByDescending(d => d.IndividualNumber).Take(1).ToList();
             
             var depositMainNumber = 1;
-            if (existingDepositAccounts != null && existingDepositAccounts.Count == 1)
-                depositMainNumber = existingDepositAccounts[0].IndividualNumber +1;
+            if (existingDepositAccounts != null && existingDepositAccounts.Count == 1) depositMainNumber = existingDepositAccounts[0].IndividualNumber +1;
             var depositPercentNumber = 1;
-            if (existingDepositAccounts != null && existingDepositAccounts.Count == 1)
-                depositPercentNumber = existingDepositAccounts[0].IndividualNumber + 1;
+            if (existingDepositAccounts != null && existingDepositAccounts.Count == 1) depositPercentNumber = existingDepositAccounts[0].IndividualNumber + 1;
 
             var depositModel = new Deposit()
             {
@@ -135,7 +134,7 @@ namespace API.Controllers
                     Credit = 0,
                     Debit = 0,
                     IndividualNumber = depositMainNumber,
-                    Name = $"{client.Firstname} {client.Lastname} {client.Middlename}",
+                    Name = $"Депозит {client.Firstname} {client.Lastname} {client.Middlename}",
                     OwnerId = client.Id,
                     CurrencyId=deposit.CurrencyId,
                 },
@@ -147,7 +146,7 @@ namespace API.Controllers
                     Credit = 0,
                     Debit = 0,
                     IndividualNumber = depositPercentNumber,
-                    Name = $"{client.Firstname} {client.Lastname} {client.Middlename}",
+                    Name = $"Проценты по депозиту {client.Firstname} {client.Lastname} {client.Middlename}",
                     OwnerId = client.Id,
                     CurrencyId = deposit.CurrencyId,
                 }

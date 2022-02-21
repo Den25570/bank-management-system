@@ -2,18 +2,16 @@
 
 namespace API.Models.Requests
 {
-    public class RegisterCredit
+    public class RegisterDeposit
     {
         [Required]
         public int ClientId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
-        public int CreditTypeId { get; set;}
+        public int DepositTypeId { get; set;}
         [Required]
-        public int CreditCode { get; set; }
-        [Required]
-        public int CreditAmount { get; set;}
+        public int DepositAmount { get; set;}
         [Required]
         public int CurrencyId { get; set;}
         [Required]
@@ -24,8 +22,6 @@ namespace API.Models.Requests
         public DateTime EndDate { get; set; }
         [Required]
         public int ContractTerm { get; set; }
-        [Required]
-        public bool PrematureRepayment { get; set; }
 
     }
 }

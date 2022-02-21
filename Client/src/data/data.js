@@ -141,8 +141,19 @@ const DepositTypes = [
     "Name": "Отзывный"
   }
 ]
+
+const CreditTypes = [
+  {
+    "Id": 2,
+    "Name": "Дифференцированный"
+  },
+  {
+    "Id": 1,
+    "Name": "Аннуитетный"
+  }
+]
     
 
 module.exports = {
-    Cities, Citizenships, Disabilities, FamilyStatuses, Currencies, DepositTypes
+    Cities, Citizenships, Disabilities, FamilyStatuses, Currencies, DepositTypes, CreditTypes
 }

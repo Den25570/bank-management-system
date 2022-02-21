@@ -4,6 +4,8 @@ import ClientsList from '../views/ClientsList.vue'
 import CreateClient from '../views/CreateClient.vue'
 import DepositForm from '../views/DepositForm.vue'
 import DepositList from "../views/DepositList.vue"
+import CreditForm from '../views/CreditForm.vue'
+import CreditList from "../views/CreditList.vue"
 import AccountList from "../views/AccountList.vue"
 
 Vue.use(VueRouter)
@@ -23,6 +25,16 @@ const routes = [
     path: '/deposits',
     name: 'DepositList',
     component: DepositList,
+  },
+  {
+    path: '/register-credit',
+    name: 'CreditForm',
+    component: CreditForm,
+  },
+  {
+    path: '/credits',
+    name: 'CreditList',
+    component: CreditList,
   },
   {
     path: '/accounts',

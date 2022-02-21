@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(BankManagmentSystemContext))]
-    [Migration("20220219075318_init")]
+    [Migration("20220221130901_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -375,6 +375,24 @@ namespace API.Migrations
                             Id = 802,
                             AccountClassId = 80,
                             Description = "Процентные доходы по кредитам и иным активным операциям с небанковскими финансовыми организациями"
+                        },
+                        new
+                        {
+                            Id = 241,
+                            AccountClassId = 24,
+                            Description = "Краткосрочные кредиты физическим лицам"
+                        },
+                        new
+                        {
+                            Id = 242,
+                            AccountClassId = 24,
+                            Description = "Долгосрочные кредиты физическим лицам"
+                        },
+                        new
+                        {
+                            Id = 247,
+                            AccountClassId = 24,
+                            Description = "Начисленные процентные доходы по кредитам и иным активным операциям с физическими лицами"
                         });
                 });
 
@@ -404,6 +422,139 @@ namespace API.Migrations
                     b.ToTable("AccountTypes");
 
                     b.HasData(
+                        new
+                        {
+                            Id = 2412,
+                            AccountSubclassId = 241,
+                            Charateristic = "А",
+                            Description = "Краткосрочные кредиты физическим лицам на потребительские нужды"
+                        },
+                        new
+                        {
+                            Id = 2413,
+                            AccountSubclassId = 241,
+                            Charateristic = "А",
+                            Description = "Краткосрочные кредиты физическим лицам на приобретение жилья"
+                        },
+                        new
+                        {
+                            Id = 2414,
+                            AccountSubclassId = 241,
+                            Charateristic = "А",
+                            Description = "Краткосрочные кредиты физическим лицам на строительство(реконструкцию) жилья"
+                        },
+                        new
+                        {
+                            Id = 2415,
+                            AccountSubclassId = 241,
+                            Charateristic = "А",
+                            Description = "Иные краткосрочные кредиты физическим лицам на финансирование недвижимости"
+                        },
+                        new
+                        {
+                            Id = 2421,
+                            AccountSubclassId = 242,
+                            Charateristic = "А",
+                            Description = "Долгосрочные кредиты физическим лицам на приобретение жилья"
+                        },
+                        new
+                        {
+                            Id = 2422,
+                            AccountSubclassId = 242,
+                            Charateristic = "А",
+                            Description = "Долгосрочные кредиты физическим лицам на строительство(реконструкцию) жилья"
+                        },
+                        new
+                        {
+                            Id = 2423,
+                            AccountSubclassId = 242,
+                            Charateristic = "А",
+                            Description = "Долгосрочные льготные кредиты физическим лицам на приобретение жилья"
+                        },
+                        new
+                        {
+                            Id = 2424,
+                            AccountSubclassId = 242,
+                            Charateristic = "А",
+                            Description = "Долгосрочные льготные кредиты физическим лицам на строительство (реконструкцию) жилья"
+                        },
+                        new
+                        {
+                            Id = 2426,
+                            AccountSubclassId = 242,
+                            Charateristic = "А",
+                            Description = "Долгосрочные льготные кредиты физическим лицам на потребительские нужды"
+                        },
+                        new
+                        {
+                            Id = 2427,
+                            AccountSubclassId = 242,
+                            Charateristic = "А",
+                            Description = "Долгосрочные кредиты физическим лицам на потребительские нужды"
+                        },
+                        new
+                        {
+                            Id = 2428,
+                            AccountSubclassId = 242,
+                            Charateristic = "А",
+                            Description = "Иные долгосрочные льготные кредиты физическим лицам на финансирование недвижимости"
+                        },
+                        new
+                        {
+                            Id = 2429,
+                            AccountSubclassId = 242,
+                            Charateristic = "A",
+                            Description = "Иные долгосрочные кредиты физическим лицам на финансирование недвижимости"
+                        },
+                        new
+                        {
+                            Id = 2471,
+                            AccountSubclassId = 247,
+                            Charateristic = "А",
+                            Description = "Начисленные процентные доходы по краткосрочным кредитам физическим лицам на потребительские нужды"
+                        },
+                        new
+                        {
+                            Id = 2472,
+                            AccountSubclassId = 247,
+                            Charateristic = "А",
+                            Description = "Начисленные процентные доходы по краткосрочным кредитам физическим лицам на финансирование недвижимости"
+                        },
+                        new
+                        {
+                            Id = 2475,
+                            AccountSubclassId = 247,
+                            Charateristic = "А",
+                            Description = "Начисленные процентные доходы по долгосрочным кредитам физическим лицам на потребительские нужды"
+                        },
+                        new
+                        {
+                            Id = 2476,
+                            AccountSubclassId = 247,
+                            Charateristic = "А",
+                            Description = "Начисленные процентные доходы по долгосрочным кредитам физическим лицам на приобретение жилья"
+                        },
+                        new
+                        {
+                            Id = 2477,
+                            AccountSubclassId = 247,
+                            Charateristic = "А",
+                            Description = "Начисленные процентные доходы по долгосрочным кредитам физическим лицам на строительство (реконструкцию) жилья"
+                        },
+                        new
+                        {
+                            Id = 2478,
+                            AccountSubclassId = 247,
+                            Charateristic = "А",
+                            Description = "Начисленные процентные доходы по иным долгосрочным кредитам физическим лицам на финансирование недвижимости"
+                        },
+                        new
+                        {
+                            Id = 2479,
+                            AccountSubclassId = 247,
+                            Charateristic = "A",
+                            Description = "Начисленные процентные доходы по иным активным операциям с физическими лицами"
+                        },
                         new
                         {
                             Id = 1010,
@@ -532,13 +683,6 @@ namespace API.Migrations
                         },
                         new
                         {
-                            Id = 8003,
-                            AccountSubclassId = 800,
-                            Charateristic = "П",
-                            Description = "Процентные доходы по вкладам (депозитам) до востребования, размещенным в Национальном банке и центральных (национальных) банках иностранных государств"
-                        },
-                        new
-                        {
                             Id = 3011,
                             AccountSubclassId = 301,
                             Charateristic = "П",
@@ -578,6 +722,13 @@ namespace API.Migrations
                             AccountSubclassId = 732,
                             Charateristic = "П",
                             Description = "Фонд развития"
+                        },
+                        new
+                        {
+                            Id = 8003,
+                            AccountSubclassId = 800,
+                            Charateristic = "П",
+                            Description = "Процентные доходы по вкладам (депозитам) до востребования, размещенным в Национальном банке и центральных (национальных) банках иностранных государств"
                         });
                 });
 
@@ -811,6 +962,106 @@ namespace API.Migrations
                     b.HasIndex("ResidenceCityId");
 
                     b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("API.Database.Credit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ContractTerm")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreditAmount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreditNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("CreditPercent")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CreditTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DaysPassed")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastPercentEvaluationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MainAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PayedToDate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PercentAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("PrematureRepayment")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CreditTypeId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("MainAccountId");
+
+                    b.HasIndex("PercentAccountId");
+
+                    b.ToTable("Credits");
+                });
+
+            modelBuilder.Entity("API.Database.CreditType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CreditTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Аннуитетный"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Дифференцированный"
+                        });
                 });
 
             modelBuilder.Entity("API.Database.Currency", b =>
@@ -1120,6 +1371,49 @@ namespace API.Migrations
                     b.Navigation("RegistrationCity");
 
                     b.Navigation("ResidenceCity");
+                });
+
+            modelBuilder.Entity("API.Database.Credit", b =>
+                {
+                    b.HasOne("API.Database.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Database.CreditType", "CreditType")
+                        .WithMany()
+                        .HasForeignKey("CreditTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Database.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Database.Account", "MainAccount")
+                        .WithMany()
+                        .HasForeignKey("MainAccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.Database.Account", "PercentAccount")
+                        .WithMany()
+                        .HasForeignKey("PercentAccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("CreditType");
+
+                    b.Navigation("Currency");
+
+                    b.Navigation("MainAccount");
+
+                    b.Navigation("PercentAccount");
                 });
 
             modelBuilder.Entity("API.Database.Deposit", b =>

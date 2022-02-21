@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Database;
 using API.Models.Requests;
+using API.Extensions;
 
 namespace API.Controllers
 {
@@ -42,6 +43,10 @@ namespace API.Controllers
             var deposits = _context.Deposits
                 .Where(d => d.Status)
                 .Include(d => d.PercentAccount).ToList();
+            var credits = _context.Credits
+                .Where(d => d.Status)
+                .Include(d => d.MainAccount)
+                .Include(d => d.PercentAccount).ToList();
 
             foreach (var deposit in deposits)
             {
@@ -54,25 +59,46 @@ namespace API.Controllers
                 {
                     if ((deposit.EndDate - currentDate).Days <= 0)
                     {
-                        AddPercentsToDeposit(deposit, devAccount, deposit.LastPercentEvaluationDate, deposit.EndDate);
+                        AddPercentsToDeposit(deposit, devAccount, deposit.EndDate);
                         deposit.Status = false;
                         devAccount.Debit -= deposit.DepositAmount;
                         deposit.MainAccount.Credit += deposit.DepositAmount;
                     }
                     else if (deposit.LastPercentEvaluationDate < firstDayOfMonth && currentDate >= firstDayOfMonth)
                     {
-                        AddPercentsToDeposit(deposit, devAccount, deposit.LastPercentEvaluationDate, firstDayOfMonth);
+                        AddPercentsToDeposit(deposit, devAccount, firstDayOfMonth);
                     }
                 }
                 if (deposit.DepositTypeId == 2)
                 {
                     if ((deposit.EndDate - currentDate).Days <= 0)
                     {
-                        AddPercentsToDeposit(deposit, devAccount, deposit.StartDate, deposit.EndDate);
+                        AddPercentsToDeposit(deposit, devAccount, deposit.EndDate);
                         deposit.Status = false;
                         devAccount.Debit -= deposit.DepositAmount;
                         deposit.MainAccount.Credit += deposit.DepositAmount;
                     }
+                }
+            }
+
+            foreach (var credit in credits)
+            {
+                credit.DaysPassed += endOfBankDay.daysToPass;
+                var currentDate = credit.StartDate.AddDays(credit.DaysPassed);
+                var firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+
+                var devAccount = devAccounts.Where(a => a.CurrencyId == credit.CurrencyId).FirstOrDefault();
+                if ((credit.EndDate - currentDate).Days <= 0)
+                {
+                    AddPercentsToCredit(credit, devAccount, credit.EndDate);
+                    credit.Status = false;
+                    devAccount.Credit += (credit.CreditAmount - credit.PayedToDate);
+                    credit.MainAccount.Credit -= (credit.CreditAmount - credit.PayedToDate);
+                    credit.PayedToDate = credit.CreditAmount;
+                }
+                else if (credit.LastPercentEvaluationDate < firstDayOfMonth && currentDate >= firstDayOfMonth)
+                {
+                    AddPercentsToCredit(credit, devAccount, firstDayOfMonth);
                 }
             }
 
@@ -87,15 +113,25 @@ namespace API.Controllers
             return CreatedAtAction("EndDay", null, "День Завершён");
         }
 
-        private static void AddPercentsToDeposit(Deposit deposit, Account devAccount, DateTime startDate, DateTime endDate)
+        private static void AddPercentsToDeposit(Deposit deposit, Account devAccount, DateTime date)
         {
-            var deltaDays = (endDate - startDate).Days;
-            var percentValue = (deltaDays / 365M) * (deposit.DepositPercent / 100M) * deposit.DepositAmount;
-
-            // Зачисление процентов
+            var percentValue = deposit.GetPercents(date);
             devAccount.Debit -= percentValue;
             deposit.PercentAccount.Credit += percentValue;
-            deposit.LastPercentEvaluationDate = DateTime.Now;
+            deposit.LastPercentEvaluationDate = date;
+        }
+
+        private static void AddPercentsToCredit(Credit credit, Account devAccount, DateTime date)
+        {
+            var percentValue = credit.GetPercents(date);
+            devAccount.Credit += percentValue;
+            credit.PercentAccount.Credit -= percentValue;
+            credit.LastPercentEvaluationDate = date;
+            
+            var mainValue = credit.GetMainPaymentValue(date);
+            devAccount.Credit += mainValue;
+            credit.MainAccount.Credit -= mainValue;
+            credit.PayedToDate += mainValue;
         }
     }
 }

@@ -55,8 +55,8 @@ export default {
             if (window.confirm("Подтвердите окончание банковского дня")) {
                 endBankDay(daysToSkip).then(result => {
                     console.log(result)
-                    this.$router.go()
                 })
+                this.$router.go()
             }
         }
     }

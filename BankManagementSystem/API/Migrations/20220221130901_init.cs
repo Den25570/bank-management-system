@@ -62,6 +62,19 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CreditTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CreditTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Currencies",
                 columns: table => new
                 {
@@ -264,6 +277,64 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Credits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreditTypeId = table.Column<int>(type: "int", nullable: false),
+                    CreditNumber = table.Column<int>(type: "int", nullable: false),
+                    CurrencyId = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    ContractTerm = table.Column<int>(type: "int", nullable: false),
+                    CreditAmount = table.Column<int>(type: "int", nullable: false),
+                    CreditPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MainAccountId = table.Column<int>(type: "int", nullable: false),
+                    PercentAccountId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    PrematureRepayment = table.Column<bool>(type: "bit", nullable: false),
+                    PayedToDate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    LastPercentEvaluationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DaysPassed = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Credits", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Credits_Accounts_MainAccountId",
+                        column: x => x.MainAccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Credits_Accounts_PercentAccountId",
+                        column: x => x.PercentAccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Credits_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Credits_CreditTypes_CreditTypeId",
+                        column: x => x.CreditTypeId,
+                        principalTable: "CreditTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Credits_Currencies_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currencies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Deposits",
                 columns: table => new
                 {
@@ -382,6 +453,15 @@ namespace API.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "CreditTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Аннуитетный" },
+                    { 2, "Дифференцированный" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Currencies",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -403,18 +483,15 @@ namespace API.Migrations
             migrationBuilder.InsertData(
                 table: "Disabilities",
                 columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { -5, "IV степень" },
-                    { -4, "III степень" },
-                    { -3, "II степень" }
-                });
+                values: new object[] { -5, "IV степень" });
 
             migrationBuilder.InsertData(
                 table: "Disabilities",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
+                    { -4, "III степень" },
+                    { -3, "II степень" },
                     { -2, "I степень" },
                     { -1, "Нет" }
                 });
@@ -440,6 +517,9 @@ namespace API.Migrations
                     { 210, 21, "Займы коммерческим организациям" },
                     { 230, 23, "Займы индивидуальным предпринимателям" },
                     { 240, 24, "Займы физическим лицам" },
+                    { 241, 24, "Краткосрочные кредиты физическим лицам" },
+                    { 242, 24, "Долгосрочные кредиты физическим лицам" },
+                    { 247, 24, "Начисленные процентные доходы по кредитам и иным активным операциям с физическими лицами" },
                     { 301, 30, "Текущие (расчетные) банковские счета клиентов" },
                     { 340, 34, "Вклады (депозиты) до востребования" },
                     { 341, 10, "Срочные вклады (депозиты)" },
@@ -461,6 +541,25 @@ namespace API.Migrations
                     { 2100, 210, "А", "Займы коммерческим организациям" },
                     { 2300, 230, "А", "Займы индивидуальным предпринимателям" },
                     { 2400, 240, "А", "Займы физическим лицам на потребительские цели" },
+                    { 2412, 241, "А", "Краткосрочные кредиты физическим лицам на потребительские нужды" },
+                    { 2413, 241, "А", "Краткосрочные кредиты физическим лицам на приобретение жилья" },
+                    { 2414, 241, "А", "Краткосрочные кредиты физическим лицам на строительство(реконструкцию) жилья" },
+                    { 2415, 241, "А", "Иные краткосрочные кредиты физическим лицам на финансирование недвижимости" },
+                    { 2421, 242, "А", "Долгосрочные кредиты физическим лицам на приобретение жилья" },
+                    { 2422, 242, "А", "Долгосрочные кредиты физическим лицам на строительство(реконструкцию) жилья" },
+                    { 2423, 242, "А", "Долгосрочные льготные кредиты физическим лицам на приобретение жилья" },
+                    { 2424, 242, "А", "Долгосрочные льготные кредиты физическим лицам на строительство (реконструкцию) жилья" },
+                    { 2426, 242, "А", "Долгосрочные льготные кредиты физическим лицам на потребительские нужды" },
+                    { 2427, 242, "А", "Долгосрочные кредиты физическим лицам на потребительские нужды" },
+                    { 2428, 242, "А", "Иные долгосрочные льготные кредиты физическим лицам на финансирование недвижимости" },
+                    { 2429, 242, "A", "Иные долгосрочные кредиты физическим лицам на финансирование недвижимости" },
+                    { 2471, 247, "А", "Начисленные процентные доходы по краткосрочным кредитам физическим лицам на потребительские нужды" },
+                    { 2472, 247, "А", "Начисленные процентные доходы по краткосрочным кредитам физическим лицам на финансирование недвижимости" },
+                    { 2475, 247, "А", "Начисленные процентные доходы по долгосрочным кредитам физическим лицам на потребительские нужды" },
+                    { 2476, 247, "А", "Начисленные процентные доходы по долгосрочным кредитам физическим лицам на приобретение жилья" },
+                    { 2477, 247, "А", "Начисленные процентные доходы по долгосрочным кредитам физическим лицам на строительство (реконструкцию) жилья" },
+                    { 2478, 247, "А", "Начисленные процентные доходы по иным долгосрочным кредитам физическим лицам на финансирование недвижимости" },
+                    { 2479, 247, "A", "Начисленные процентные доходы по иным активным операциям с физическими лицами" },
                     { 3011, 301, "П", "Текущие (расчетные) банковские счета небанковских финансовых организаций" },
                     { 3012, 301, "П", "Текущие (расчетные) банковские счета коммерческих организаций" },
                     { 3013, 301, "П", "Текущие (расчетные) банковские счета индивидуальных предпринимателей" },
@@ -478,10 +577,18 @@ namespace API.Migrations
                     { 3415, 341, "П", "Срочные вклады (депозиты) некоммерческих организаций" },
                     { 3470, 347, "П", "Начисленные процентные расходы по вкладам(депозитам) до востребования" },
                     { 3471, 347, "П", "Начисленные процентные расходы по срочным вкладам(депозитам)" },
-                    { 3472, 347, "П", "Начисленные процентные расходы по условным вкладам(депозитам)" },
-                    { 7327, 732, "П", "Фонд развития" },
-                    { 8003, 800, "П", "Процентные доходы по вкладам (депозитам) до востребования, размещенным в Национальном банке и центральных (национальных) банках иностранных государств" }
+                    { 3472, 347, "П", "Начисленные процентные расходы по условным вкладам(депозитам)" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "AccountTypes",
+                columns: new[] { "Id", "AccountSubclassId", "Charateristic", "Description" },
+                values: new object[] { 7327, 732, "П", "Фонд развития" });
+
+            migrationBuilder.InsertData(
+                table: "AccountTypes",
+                columns: new[] { "Id", "AccountSubclassId", "Charateristic", "Description" },
+                values: new object[] { 8003, 800, "П", "Процентные доходы по вкладам (депозитам) до востребования, размещенным в Национальном банке и центральных (национальных) банках иностранных государств" });
 
             migrationBuilder.InsertData(
                 table: "Accounts",
@@ -558,6 +665,31 @@ namespace API.Migrations
                 column: "ResidenceCityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Credits_ClientId",
+                table: "Credits",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Credits_CreditTypeId",
+                table: "Credits",
+                column: "CreditTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Credits_CurrencyId",
+                table: "Credits",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Credits_MainAccountId",
+                table: "Credits",
+                column: "MainAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Credits_PercentAccountId",
+                table: "Credits",
+                column: "PercentAccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Deposits_ClientId",
                 table: "Deposits",
                 column: "ClientId");
@@ -586,7 +718,13 @@ namespace API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Credits");
+
+            migrationBuilder.DropTable(
                 name: "Deposits");
+
+            migrationBuilder.DropTable(
+                name: "CreditTypes");
 
             migrationBuilder.DropTable(
                 name: "Accounts");

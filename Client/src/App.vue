@@ -9,6 +9,10 @@
         <b-dropdown-item><router-link class="text-dark" to="/deposits">Список</router-link></b-dropdown-item>
         <b-dropdown-item><router-link class="text-dark" to="/register-deposit">Форма заключения депозита</router-link></b-dropdown-item>
       </b-dropdown>
+      <b-dropdown id="dropdown-1" variant="primary" text="Кредиты" class="m-md-2">
+        <b-dropdown-item><router-link class="text-dark" to="/credits">Список</router-link></b-dropdown-item>
+        <b-dropdown-item><router-link class="text-dark" to="/register-credit">Форма заключения кредита</router-link></b-dropdown-item>
+      </b-dropdown>
       <b-dropdown id="dropdown-2" variant="primary" text="Счета" class="m-md-2">
         <b-dropdown-item><router-link class="text-dark" to="/accounts">Список</router-link></b-dropdown-item>
       </b-dropdown>
@@ -18,6 +22,16 @@
 </template>
 
 <style>
+  button.btn-primary {
+    background-color: transparent !important; 
+    border-color: transparent !important;
+  }
+  button.btn-check:focus + button.btn-primary, button.btn-primary:focus {
+    color: #fff;
+    background-color: transparent !important; 
+    border-color: transparent !important;
+    box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 50%);
+}
   p {
     padding: 0;
     margin-bottom: 0 !important;

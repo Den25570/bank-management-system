@@ -1,8 +1,9 @@
-﻿using API.Exceptions;
+﻿using API.Database;
+using API.Exceptions;
 
 namespace API.Extensions
 {
-    public static class ModelToDatabaseExtensions
+    public static class DatabaseExtensions
     {
         public static Database.Client ToDatabaseModel(this Models.Client client, Database.Client databaseModel = null)
         {
@@ -48,5 +49,32 @@ namespace API.Extensions
 
             return databaseModel;
         }
+
+        public static decimal GetPercents(this Credit credit, DateTime date)
+        {
+            var deltaDays = (date - credit.LastPercentEvaluationDate).Days;
+            var percentValue = (deltaDays / 365M) * (credit.CreditPercent / 100M);
+            if (credit.CreditTypeId == 1) percentValue *= credit.CreditAmount;
+            else if (credit.CreditTypeId == 2) percentValue *= (credit.CreditAmount - credit.PayedToDate);
+            return percentValue;
+        }
+
+        public static decimal GetMainPaymentValue(this Credit credit, DateTime date)
+        {
+            var deltaDays = (date - credit.LastPercentEvaluationDate).Days * 1M;
+            var value = deltaDays  / (credit.EndDate - credit.StartDate).Days;
+            if (credit.CreditTypeId == 1) value *= 0;
+            else if (credit.CreditTypeId == 2) value *= credit.CreditAmount;
+            return value;
+        }
+
+        public static decimal GetPercents(this Deposit deposit, DateTime date)
+        {
+            var deltaDays = (date - deposit.LastPercentEvaluationDate).Days;
+            var percentValue = (deltaDays / 365M) * (deposit.DepositPercent / 100M) * deposit.DepositAmount;
+            return percentValue;
+        }
+
+        
     }
 }

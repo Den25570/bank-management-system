@@ -18,6 +18,8 @@ namespace API.Database
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Deposit> Deposits { get; set; }
         public DbSet<DepositType> DepositTypes { get; set; }
+        public DbSet<Credit> Credits { get; set; }
+        public DbSet<CreditType> CreditTypes { get; set; }
 
         public BankManagmentSystemContext(DbContextOptions<BankManagmentSystemContext> options) : base(options)
         {
@@ -52,6 +54,16 @@ namespace API.Database
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Credit>()
+                .HasOne(c => c.MainAccount)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict); // <--
+
+            modelBuilder.Entity<Credit>()
+                .HasOne(e => e.PercentAccount)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Client>()
                 .HasIndex(u => u.PassportIdNumber)
                 .IsUnique();
@@ -67,6 +79,7 @@ namespace API.Database
             modelBuilder.SeedAccountActivities();
             modelBuilder.SeedAccounts();
             modelBuilder.SeedDepositTypes();
+            modelBuilder.SeedCreditTypes();
             modelBuilder.SeedCurrencies();
         }
     }
