@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end mt-4 border-top py-3">
-                <b-button variant="success" @click="CreateCredit" :disabled="triedUpdateOrCreate && !state">Создать Депозит</b-button>
+                <b-button variant="success" @click="CreateCredit" :disabled="triedUpdateOrCreate && !state">Оформить Кредит</b-button>
             </div>
         </div>
     </b-container>
