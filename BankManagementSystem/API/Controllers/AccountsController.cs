@@ -126,12 +126,13 @@ namespace API.Controllers
             var percentValue = credit.GetPercents(date);
             devAccount.Credit += percentValue;
             credit.PercentAccount.Credit -= percentValue;
-            credit.LastPercentEvaluationDate = date;
             
             var mainValue = credit.GetMainPaymentValue(date);
             devAccount.Credit += mainValue;
             credit.MainAccount.Credit -= mainValue;
             credit.PayedToDate += mainValue;
+
+            credit.LastPercentEvaluationDate = date;
         }
     }
 }
