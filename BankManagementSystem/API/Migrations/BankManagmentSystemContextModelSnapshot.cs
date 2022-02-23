@@ -58,6 +58,9 @@ namespace API.Migrations
                     b.Property<int?>("OwnerId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PIN")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountActivityId");

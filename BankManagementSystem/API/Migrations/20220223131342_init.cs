@@ -246,7 +246,8 @@ namespace API.Migrations
                     Credit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
-                    OwnerId = table.Column<int>(type: "int", nullable: true)
+                    OwnerId = table.Column<int>(type: "int", nullable: true),
+                    PIN = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -592,15 +593,15 @@ namespace API.Migrations
 
             migrationBuilder.InsertData(
                 table: "Accounts",
-                columns: new[] { "Id", "AccountActivityId", "AccountTypeId", "Balance", "Credit", "CurrencyId", "Debit", "IndividualNumber", "Name", "OwnerId" },
+                columns: new[] { "Id", "AccountActivityId", "AccountTypeId", "Balance", "Credit", "CurrencyId", "Debit", "IndividualNumber", "Name", "OwnerId", "PIN" },
                 values: new object[,]
                 {
-                    { 1, 1, 1010, 0m, 0m, 1, 0m, 1, "Касса банка USD", null },
-                    { 2, 2, 7327, 10000m, 0m, 1, 0m, 1, "Счет фонда развития банка USD", null },
-                    { 3, 1, 1010, 0m, 0m, 2, 0m, 2, "Касса банка BYN", null },
-                    { 4, 2, 7327, 10000000000m, 0m, 2, 0m, 2, "Счет фонда развития банка BYN", null },
-                    { 5, 1, 1010, 0m, 0m, 3, 0m, 3, "Касса банка RUB", null },
-                    { 6, 2, 7327, 100000m, 0m, 3, 0m, 3, "Счет фонда развития банка RUB", null }
+                    { 1, 1, 1010, 0m, 0m, 1, 0m, 1, "Касса банка USD", null, null },
+                    { 2, 2, 7327, 10000m, 0m, 1, 0m, 1, "Счет фонда развития банка USD", null, null },
+                    { 3, 1, 1010, 0m, 0m, 2, 0m, 2, "Касса банка BYN", null, null },
+                    { 4, 2, 7327, 10000000000m, 0m, 2, 0m, 2, "Счет фонда развития банка BYN", null, null },
+                    { 5, 1, 1010, 0m, 0m, 3, 0m, 3, "Касса банка RUB", null, null },
+                    { 6, 2, 7327, 100000m, 0m, 3, 0m, 3, "Счет фонда развития банка RUB", null, null }
                 });
 
             migrationBuilder.CreateIndex(

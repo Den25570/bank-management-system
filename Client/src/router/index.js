@@ -7,6 +7,7 @@ import DepositList from "../views/DepositList.vue"
 import CreditForm from '../views/CreditForm.vue'
 import CreditList from "../views/CreditList.vue"
 import AccountList from "../views/AccountList.vue"
+import Terminal from "../views/Terminal.vue"
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes = [
     path: '/clients',
     name: 'Clients',
     component: ClientsList,
+  },
+  {
+    path: '/terminal',
+    name: 'Terminal',
+    component: Terminal,
   },
   {
     path: '/register-deposit',

@@ -24,6 +24,7 @@ namespace API.Database
         public int CurrencyId { get; set; }
 
         public int? OwnerId { get; set; }
+        public int? PIN { get; set; }
 
         public Currency Currency { get; set; }
         public Client Owner { get; set; }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(BankManagmentSystemContext))]
-    [Migration("20220221130901_init")]
+    [Migration("20220223131342_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,9 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PIN")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

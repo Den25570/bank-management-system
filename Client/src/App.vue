@@ -16,6 +16,10 @@
       <b-dropdown id="dropdown-2" variant="primary" text="Счета" class="m-md-2">
         <b-dropdown-item><router-link class="text-dark" to="/accounts">Список</router-link></b-dropdown-item>
       </b-dropdown>
+      <b-dropdown id="dropdown-2" variant="primary" text="Терминал" class="m-md-2">
+        <b-dropdown-item><router-link class="text-dark" to="/terminal">Интерфейс</router-link></b-dropdown-item>
+      </b-dropdown>
+      
     </div>
     <router-view/>
   </div>

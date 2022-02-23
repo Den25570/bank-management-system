@@ -130,6 +130,7 @@ namespace API.Controllers
                 {
                     AccountActivityId = 2,
                     AccountTypeId = mainAccountCode,
+                    PIN = mainAccountCode.ReverseInt(),
                     Balance = 0,
                     Credit = 0,
                     Debit = 0,
@@ -142,6 +143,7 @@ namespace API.Controllers
                 {
                     AccountActivityId = 2,
                     AccountTypeId = percentAccountCode,
+                    PIN = percentAccountCode.ReverseInt(),
                     Balance = 0,
                     Credit = 0,
                     Debit = 0,
